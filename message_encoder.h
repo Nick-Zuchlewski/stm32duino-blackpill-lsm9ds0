@@ -7,12 +7,9 @@
 
 #define START_CHAR 0xFF
 #define MESSAGE_ID 0x06
-#define MESSAGE_LEN 0x19
+#define MESSAGE_LEN 0x1C
 #define HEADER_SIZE 0x03
 #define PAYLOAD_SIZE MESSAGE_LEN
-
-// Am lazy...
-typedef Adafruit_LSM9DS0::lsm9ds0Vector_t vector_t; 
 
 class MessageEncoder
 {
@@ -22,7 +19,7 @@ public:
     MessageEncoder();
     ~MessageEncoder();
 
-    void Encode(uint8_t* buffer, const vector_t* accelData, const vector_t* gyroData, const int16_t* temperature);
+    void Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g, const sensors_event_t* t);
 
     static constexpr uint8_t bufferSize = HEADER_SIZE + PAYLOAD_SIZE + 2;
 };
