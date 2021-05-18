@@ -33,11 +33,11 @@ void loop() {
   // Perform read
   lsm.read();
   // Get a new sensor event
-  sensors_event_t a, m, g, t;
-  lsm.getEvent(&a, &m, &g, &t); 
+  sensors_event_t a, g;
+  lsm.getEvent(&a, NULL, &g, NULL); 
   // Encode
-  uint8_t buffer[MessageEncoder::bufferSize];
-  enc.Encode(buffer, &a, &g, &t);
+  uint8_t buffer[PACKET_SIZE];
+  enc.Encode(buffer, &a, &g);
   // Write
   SerialUSB.write(buffer, sizeof(buffer));
   // for (int i = 0; i < MessageEncoder::bufferSize; i++)
@@ -45,7 +45,7 @@ void loop() {
   //   SerialUSB.printf("%d ", buffer[i]);
   // }
   // SerialUSB.print("\n");
-  // Toggle and delage
+  // Toggle and delay
   digitalToggle(LED_BUILTIN);
   delay(200);
 }

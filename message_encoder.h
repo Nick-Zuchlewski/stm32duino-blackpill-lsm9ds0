@@ -7,9 +7,10 @@
 
 #define START_CHAR 0xFF
 #define MESSAGE_ID 0x06
-#define MESSAGE_LEN 0x1C
+#define PAYLOAD_SIZE 0x18
 #define HEADER_SIZE 0x03
-#define PAYLOAD_SIZE MESSAGE_LEN
+#define CRC_SIZE 0x02
+#define PACKET_SIZE (HEADER_SIZE + PAYLOAD_SIZE + CRC_SIZE)
 
 class MessageEncoder
 {
@@ -19,9 +20,7 @@ public:
     MessageEncoder();
     ~MessageEncoder();
 
-    void Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g, const sensors_event_t* t);
-
-    static constexpr uint8_t bufferSize = HEADER_SIZE + PAYLOAD_SIZE + 2;
+    void Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g);
 };
 
 #endif

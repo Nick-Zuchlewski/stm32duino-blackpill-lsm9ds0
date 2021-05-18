@@ -7,14 +7,14 @@ MessageEncoder::MessageEncoder()
 
 MessageEncoder::~MessageEncoder() {}
 
-void  MessageEncoder::Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g, const sensors_event_t* t) 
+void  MessageEncoder::Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g) 
 {
     // Reset the checksum
     crc16.Reset();
     // Header
     buffer[0] = START_CHAR;
     buffer[1] = MESSAGE_ID;
-    buffer[2] = MESSAGE_LEN;
+    buffer[2] = PAYLOAD_SIZE; // Payload size == Message len
     uint8_t index = 3;
     // Accel X, Y, Z
     memcpy((buffer+index), &a->acceleration.x, sizeof(float));
@@ -30,10 +30,7 @@ void  MessageEncoder::Encode(uint8_t* buffer, const sensors_event_t* a, const se
     index +=sizeof(float);
     memcpy((buffer+index), &g->gyro.z, sizeof(float));
     index +=sizeof(float);
-    // Temp
-    memcpy((buffer+index), &t->temperature, sizeof(float));
-    index +=sizeof(float);
     // Add CRC
-    uint16_t checksum = crc16.AddBuffer(buffer, PAYLOAD_SIZE);
+    uint16_t checksum = crc16.AddBuffer(buffer, (HEADER_SIZE + PAYLOAD_SIZE));
     memcpy((buffer+index), &checksum, sizeof(uint16_t));
 }

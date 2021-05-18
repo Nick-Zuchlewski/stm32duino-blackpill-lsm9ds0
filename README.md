@@ -1,6 +1,6 @@
 # stm32duino-blackpill-lsm9ds0
 
-The purpose of this project is tp provide accelerometer, gyro, and temperature data to an RPI4 via serial (USB CDC VCOM). Although the project is named with a `lsm9ds0`, I am acutally using a `lsm9ds1`.
+The purpose of this project is tp provide accelerometer and gyro data to an RPI4 via serial (USB CDC VCOM). Although the project is named with a `lsm9ds0`, I am acutally using a `lsm9ds1`.
 
 ## Parts
 
