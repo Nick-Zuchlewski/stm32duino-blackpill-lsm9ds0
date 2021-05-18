@@ -30,8 +30,6 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loop() {
-  // Perform read
-  lsm.read();
   // Get a new sensor event
   sensors_event_t a, g;
   lsm.getEvent(&a, NULL, &g, NULL); 
@@ -40,7 +38,7 @@ void loop() {
   enc.Encode(buffer, &a, &g);
   // Write
   SerialUSB.write(buffer, sizeof(buffer));
-  // for (int i = 0; i < MessageEncoder::bufferSize; i++)
+  // for (int i = 0; i < PACKET_SIZE; i++)
   // {
   //   SerialUSB.printf("%d ", buffer[i]);
   // }
