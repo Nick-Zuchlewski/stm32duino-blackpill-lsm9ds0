@@ -6,9 +6,9 @@
 #include "crc16_ccitt.h"
 
 #define START_CHAR 0xFF
-#define MESSAGE_ID 0x06
+#define MESSAGE_ID 0x0B
 #define PAYLOAD_SIZE 0x18
-#define HEADER_SIZE 0x03
+#define HEADER_SIZE 0x04
 #define CRC_SIZE 0x02
 #define PACKET_SIZE (HEADER_SIZE + PAYLOAD_SIZE + CRC_SIZE)
 
@@ -16,6 +16,7 @@ class MessageEncoder
 {
 private:
     CRC16_CCITT crc16;
+    uint8_t sequenceID;
 public:
     MessageEncoder();
     ~MessageEncoder();

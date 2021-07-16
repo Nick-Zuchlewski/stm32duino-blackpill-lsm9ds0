@@ -20,7 +20,7 @@ void setup() {
   //activate USB CDC driver
   SerialUSB.begin();
 
-  SerialUSB.println("LSM9DS1 data read demo");
+  // SerialUSB.println("LSM9DS1");
   
   // LSM Begin
   lsm.begin();

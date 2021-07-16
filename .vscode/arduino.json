@@ -1,5 +1,5 @@
 {
-    "port": "COM18",
+    "port": "COM20",
     "configuration": "pnum=BLACKPILL_F411CE,upload_method=swdMethod,xserial=generic,usb=CDCgen,xusb=FS,opt=osstd,rtlib=nano",
     "board": "STMicroelectronics:stm32:GenF4",
     "sketch": "stm32duino-blackpill-lsm9ds0.ino",
