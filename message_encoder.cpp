@@ -8,7 +8,7 @@ MessageEncoder::MessageEncoder()
 
 MessageEncoder::~MessageEncoder() {}
 
-void  MessageEncoder::Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g) 
+void MessageEncoder::Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g) 
 {
     // Reset the checksum
     crc16.Reset();
