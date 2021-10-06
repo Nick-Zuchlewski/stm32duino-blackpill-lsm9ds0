@@ -1,3 +1,6 @@
+#ifndef __SAMPLEBUFFER_H__
+#define __SAMPLEBUFFER_H__
+
 #include <Adafruit_LSM9DS1.h>
 #include <Adafruit_Sensor.h>
 #include <vector>
@@ -32,3 +35,5 @@ public:
     bool Add(sensors_event_t const& a, sensors_event_t const& g);
     sensor_avg_t Average();
 };
+
+#endif

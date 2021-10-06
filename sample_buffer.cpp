@@ -1,4 +1,5 @@
 #include "sample_buffer.h"
+#include <Wire.h>
 
 SampleBuffer::SampleBuffer(uint8_t capacity):
     capacity(capacity)
@@ -37,11 +38,11 @@ bool SampleBuffer::Add(sensors_event_t const& a, sensors_event_t const& g)
     a_buffer_x.push_back(a.acceleration.x);
     a_buffer_y.push_back(a.acceleration.y);
     a_buffer_z.push_back(a.acceleration.z);
-    g_buffer_x.push_back(a.gyro.x);
-    g_buffer_y.push_back(a.gyro.y);
-    g_buffer_z.push_back(a.gyro.z);
+    g_buffer_x.push_back(g.gyro.x);
+    g_buffer_y.push_back(g.gyro.y);
+    g_buffer_z.push_back(g.gyro.z);
     // Check if the sample buffers are full
-    if (size >= ++capacity) full = true;
+    if (++size >= capacity) full = true;
     return full;
 }
 
@@ -57,6 +58,7 @@ sensor_avg_t SampleBuffer::Average()
     sensor_avg.g_z = AverageBuffer(g_buffer_z);
     // Reset
     Reset();
+    return sensor_avg;
 }
 
 float SampleBuffer::AverageBuffer(std::vector<float> const& buffer)
@@ -65,6 +67,6 @@ float SampleBuffer::AverageBuffer(std::vector<float> const& buffer)
     // Check if empty
     if (buffer.empty()) return avg;
     // Average
-    avg = std::accumulate(buffer.begin(), buffer.end(), 0.0) / size;
+    avg = std::accumulate(buffer.begin(), buffer.end(), 0.0) / static_cast<float>(size);
     return avg;
 }

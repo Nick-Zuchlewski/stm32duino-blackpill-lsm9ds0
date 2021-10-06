@@ -6,6 +6,7 @@
 
 #define SAMPLE_RATE 10
 #define SAMPLE_SIZE 20
+#define AVG_ENABLE
 
 // Create the lsm instance
 Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();
@@ -38,11 +39,7 @@ void loop() {
   // Get a new sensor event
   sensors_event_t a, g;
   lsm.getEvent(&a, NULL, &g, NULL); 
-  // Encode
-  uint8_t buffer[PACKET_SIZE];
-  // enc.Encode(buffer, &a, &g);
-  // // Write
-  // SerialUSB.write(buffer, sizeof(buffer));
+  
   // Serial.print("Accel X: "); Serial.print(a.acceleration.x); Serial.print(" m/s^2");
   // Serial.print("\tY: "); Serial.print(a.acceleration.y);     Serial.print(" m/s^2 ");
   // Serial.print("\tZ: "); Serial.print(a.acceleration.z);     Serial.println(" m/s^2 ");
@@ -50,23 +47,38 @@ void loop() {
   // Serial.print("Gyro X: "); Serial.print(g.gyro.x);   Serial.print(" rad/s");
   // Serial.print("\tY: "); Serial.print(g.gyro.y);      Serial.print(" rad/s");
   // Serial.print("\tZ: "); Serial.print(g.gyro.z);      Serial.println(" rad/s");
-  // Buffer and average
-  if (sampleBuffer.Add(a, g))
-  {
-    sensor_avg_t avg = sampleBuffer.Average();
-    Serial.print("Avg Accel X: ");  Serial.print(avg.a_x);  Serial.print(" m/s^2");
-    Serial.print("\tY: ");      Serial.print(avg.a_y);      Serial.print(" m/s^2 ");
-    Serial.print("\tZ: ");      Serial.print(avg.a_z);      Serial.println(" m/s^2 ");
 
-    Serial.print("Avg Gyro X: ");   Serial.print(avg.g_x);  Serial.print(" rad/s");
-    Serial.print("\tY: ");      Serial.print(avg.g_y);      Serial.print(" rad/s");
-    Serial.print("\tZ: ");      Serial.print(avg.g_z);      Serial.println(" rad/s");
-  }
-  // Toggle and delay
-  digitalToggle(LED_BUILTIN);
+  #ifdef AVG_ENABLE
+    // Buffer and average
+    if (sampleBuffer.Add(a, g))
+    {
+      // Average
+      sensor_avg_t avg = sampleBuffer.Average();
+      // Write
+      Serial.print("Avg Accel X: ");  Serial.print(avg.a_x);  Serial.print(" m/s^2");
+      Serial.print("\tY: ");          Serial.print(avg.a_y);  Serial.print(" m/s^2 ");
+      Serial.print("\tZ: ");          Serial.print(avg.a_z);  Serial.println(" m/s^2 ");
+
+      Serial.print("Avg Gyro X: ");   Serial.print(avg.g_x);  Serial.print(" rad/s");
+      Serial.print("\tY: ");          Serial.print(avg.g_y);  Serial.print(" rad/s");
+      Serial.print("\tZ: ");          Serial.print(avg.g_z);  Serial.println(" rad/s");
+      // Encode and Write
+      // uint8_t buffer[PACKET_SIZE];
+      // enc.Encode(buffer, &avg);
+      // SerialUSB.write(buffer, sizeof(buffer));
+      // Blink
+      digitalToggle(LED_BUILTIN);
+    }
+  #else
+    // Encode and Write
+    uint8_t buffer[PACKET_SIZE];
+    enc.Encode(buffer, &a, &g);
+    SerialUSB.write(buffer, sizeof(buffer));
+    digitalToggle(LED_BUILTIN);
+  #endif
+
   delay(SAMPLE_RATE);
 }
-
 void setupSensor()
 {
   // 1.) Set the accelerometer range

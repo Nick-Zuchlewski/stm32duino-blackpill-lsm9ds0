@@ -4,6 +4,7 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_LSM9DS0.h>
 #include "crc16_ccitt.h"
+#include "sample_buffer.h"
 
 #define START_CHAR 0xFF
 #define MESSAGE_ID 0x0B
@@ -22,6 +23,7 @@ public:
     ~MessageEncoder();
 
     void Encode(uint8_t* buffer, const sensors_event_t* a, const sensors_event_t* g);
+    void Encode(uint8_t* buffer, const sensor_avg_t* avg);
 };
 
 #endif
